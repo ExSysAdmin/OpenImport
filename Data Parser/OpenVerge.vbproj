@@ -187,5 +187,13 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\01.PNG" />
+    <Content Include="Images\02.PNG" />
+    <Content Include="Images\03.PNG" />
+    <Content Include="Images\04.PNG" />
+    <Content Include="Images\05.PNG" />
+    <Content Include="Images\06.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
