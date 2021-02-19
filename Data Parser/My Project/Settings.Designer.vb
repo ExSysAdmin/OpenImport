@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.OpenImport.My.MySettings
+        Friend ReadOnly Property Settings() As Global.OpenVerge.My.MySettings
             Get
-                Return Global.OpenImport.My.MySettings.Default
+                Return Global.OpenVerge.My.MySettings.Default
             End Get
         End Property
     End Module

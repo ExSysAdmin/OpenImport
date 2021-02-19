@@ -22,8 +22,9 @@ Partial Class Settings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Import Configuration")
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regex Patterns")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Import Configuration")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("GridView Display")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regex Patterns")
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TreeView1 = New System.Windows.Forms.TreeView()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
@@ -71,11 +72,13 @@ Partial Class Settings
         Me.TreeView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TreeView1.Location = New System.Drawing.Point(13, 13)
         Me.TreeView1.Name = "TreeView1"
-        TreeNode3.Name = "SettingsRootNode"
-        TreeNode3.Text = "Import Configuration"
-        TreeNode4.Name = "Node0"
-        TreeNode4.Text = "Regex Patterns"
-        Me.TreeView1.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode3, TreeNode4})
+        TreeNode1.Name = "SettingsRootNode"
+        TreeNode1.Text = "Import Configuration"
+        TreeNode2.Name = "Node0"
+        TreeNode2.Text = "GridView Display"
+        TreeNode3.Name = "Node0"
+        TreeNode3.Text = "Regex Patterns"
+        Me.TreeView1.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3})
         Me.TreeView1.Size = New System.Drawing.Size(194, 435)
         Me.TreeView1.TabIndex = 0
         '

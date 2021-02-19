@@ -22,6 +22,7 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.OpenFileTextBox = New System.Windows.Forms.TextBox()
         Me.BrowseBtn = New System.Windows.Forms.Button()
@@ -32,24 +33,40 @@ Partial Class Form1
         Me.CloseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GridViewDisplayToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ColumnWidthToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AllCellsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HeaderColumnToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FillToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NoneToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SponsorsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.DGVContextMenuStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.MenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
+        Me.DGVContextMenuStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -122,13 +139,57 @@ Partial Class Form1
         '
         'ViewToolStripMenuItem
         '
+        Me.ViewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GridViewDisplayToolStripMenuItem})
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
         Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.ViewToolStripMenuItem.Text = "View"
         '
+        'GridViewDisplayToolStripMenuItem
+        '
+        Me.GridViewDisplayToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ColumnWidthToolStripMenuItem})
+        Me.GridViewDisplayToolStripMenuItem.Name = "GridViewDisplayToolStripMenuItem"
+        Me.GridViewDisplayToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.GridViewDisplayToolStripMenuItem.Text = "GridView Display"
+        Me.GridViewDisplayToolStripMenuItem.Visible = False
+        '
+        'ColumnWidthToolStripMenuItem
+        '
+        Me.ColumnWidthToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AllCellsToolStripMenuItem, Me.HeaderColumnToolStripMenuItem, Me.FillToolStripMenuItem, Me.NoneToolStripMenuItem})
+        Me.ColumnWidthToolStripMenuItem.Name = "ColumnWidthToolStripMenuItem"
+        Me.ColumnWidthToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ColumnWidthToolStripMenuItem.Text = "Column Width"
+        '
+        'AllCellsToolStripMenuItem
+        '
+        Me.AllCellsToolStripMenuItem.CheckOnClick = True
+        Me.AllCellsToolStripMenuItem.Name = "AllCellsToolStripMenuItem"
+        Me.AllCellsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AllCellsToolStripMenuItem.Text = "All Cells"
+        '
+        'HeaderColumnToolStripMenuItem
+        '
+        Me.HeaderColumnToolStripMenuItem.CheckOnClick = True
+        Me.HeaderColumnToolStripMenuItem.Name = "HeaderColumnToolStripMenuItem"
+        Me.HeaderColumnToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.HeaderColumnToolStripMenuItem.Text = "HeaderColumn"
+        '
+        'FillToolStripMenuItem
+        '
+        Me.FillToolStripMenuItem.CheckOnClick = True
+        Me.FillToolStripMenuItem.Name = "FillToolStripMenuItem"
+        Me.FillToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FillToolStripMenuItem.Text = "Fit to Display"
+        '
+        'NoneToolStripMenuItem
+        '
+        Me.NoneToolStripMenuItem.CheckOnClick = True
+        Me.NoneToolStripMenuItem.Name = "NoneToolStripMenuItem"
+        Me.NoneToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.NoneToolStripMenuItem.Text = "None"
+        '
         'OptionsToolStripMenuItem
         '
-        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem})
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.SponsorsToolStripMenuItem})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
         Me.OptionsToolStripMenuItem.Text = "Options"
@@ -138,6 +199,12 @@ Partial Class Form1
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
         Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.SettingsToolStripMenuItem.Text = "Advanced Settings"
+        '
+        'SponsorsToolStripMenuItem
+        '
+        Me.SponsorsToolStripMenuItem.Name = "SponsorsToolStripMenuItem"
+        Me.SponsorsToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.SponsorsToolStripMenuItem.Text = "Sponsors"
         '
         'TableLayoutPanel1
         '
@@ -203,26 +270,91 @@ Partial Class Form1
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(746, 354)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Open Import"
+        Me.TabPage1.Text = "OpenVerge"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel2
         '
-        Me.TableLayoutPanel2.ColumnCount = 1
+        Me.TableLayoutPanel2.ColumnCount = 3
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 1, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label4, 1, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 1, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label2, 1, 1)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 3
+        Me.TableLayoutPanel2.RowCount = 6
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(740, 348)
         Me.TableLayoutPanel2.TabIndex = 1
         '
+        'Label5
+        '
+        Me.Label5.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(23, 249)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(694, 50)
+        Me.Label5.TabIndex = 4
+        Me.Label5.Text = "To Your Favorite Cloud Applications."
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(23, 199)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(694, 50)
+        Me.Label4.TabIndex = 3
+        Me.Label4.Text = "Into Uniform Structures That Can Be Automatically Uploaded"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label3
+        '
+        Me.Label3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(23, 149)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(694, 50)
+        Me.Label3.TabIndex = 2
+        Me.Label3.Text = "Your Open Source Desktop Application For Converging Data"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label2
+        '
+        Me.Label2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 60.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(23, 49)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(694, 100)
+        Me.Label2.TabIndex = 0
+        Me.Label2.Text = "OpenVerge"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'StatusStrip1
         '
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel2})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripProgressBar1, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel2})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 428)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(800, 22)
@@ -246,6 +378,23 @@ Partial Class Form1
         Me.BackgroundWorker1.WorkerReportsProgress = True
         Me.BackgroundWorker1.WorkerSupportsCancellation = True
         '
+        'DGVContextMenuStrip
+        '
+        Me.DGVContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
+        Me.DGVContextMenuStrip.Name = "DGVContextMenuStrip"
+        Me.DGVContextMenuStrip.Size = New System.Drawing.Size(108, 26)
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem1.Text = "Delete"
+        '
+        'ToolStripProgressBar1
+        '
+        Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
+        Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 16)
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -257,7 +406,7 @@ Partial Class Form1
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
         Me.ShowIcon = False
-        Me.Text = "Open Import"
+        Me.Text = "OpenVerge"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -265,8 +414,11 @@ Partial Class Form1
         Me.GroupBox1.PerformLayout()
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
+        Me.DGVContextMenuStrip.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -293,4 +445,18 @@ Partial Class Form1
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents SponsorsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GridViewDisplayToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ColumnWidthToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AllCellsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents HeaderColumnToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents FillToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents NoneToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DGVContextMenuStrip As ContextMenuStrip
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ToolStripProgressBar1 As ToolStripProgressBar
 End Class

@@ -10,6 +10,8 @@ Public Class Form1
     Public GridViewList As List(Of DataGridView) = New List(Of DataGridView)
     Public TextboxList As List(Of TextBox) = New List(Of TextBox)
 
+    Public DefaultDataGridViewSettings As Dictionary(Of String, String) = New Dictionary(Of String, String)
+
 
 
 
@@ -128,11 +130,6 @@ Public Class Form1
 
             Else
 
-                'Dim IW As New ImportWizard
-                'IW.StrFilePath = FilePath
-                'If IW.ShowDialog = DialogResult.OK Then
-                'End If
-
             End If
 
         End If
@@ -172,6 +169,66 @@ Public Class Form1
     End Sub
 
 
+    Sub ResizeColumns(ByVal strTabGUID As String, ByVal FillMode As Int32)
+        Try
+            For Each DataGridView As DataGridView In GridViewList
+                If (DataGridView.Name) = (strTabGUID) Then
+                    For Each Column As DataGridViewColumn In DataGridView.Columns
+                        Select Case FillMode
+                            Case 2
+                                Column.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader
+                            Case 6
+                                Column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                            Case 16
+                                Column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+                            Case Else
+                                Column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+                        End Select
+                    Next
+                    DataGridView.Refresh()
+                    DataGridView.Update()
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+
+    Function GetColumnAutoSizeMode(ByVal strTabGUID As String) As DataGridViewAutoSizeColumnMode
+        Try
+            For Each DataGridView As DataGridView In GridViewList
+                If (DataGridView.Name) = (strTabGUID) Then
+                    Dim AutoSizeModeTheSame As Boolean = True
+                    Dim AutoSizeMode As DataGridViewAutoSizeColumnMode = Nothing
+                    For Each Column As DataGridViewColumn In DataGridView.Columns
+                        If AutoSizeMode = Nothing Then
+                            AutoSizeMode = Column.AutoSizeMode
+                        Else
+                            If AutoSizeMode <> Column.AutoSizeMode Then
+                                AutoSizeModeTheSame = False
+                            End If
+                        End If
+                    Next
+                    If AutoSizeModeTheSame Then
+                        Return AutoSizeMode
+                    Else
+                        Return Nothing
+                    End If
+
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
+        Return Nothing
+    End Function
+
+
+
+
 
 
 
@@ -193,8 +250,11 @@ Public Class Form1
         TLP.Dock = DockStyle.Fill
         TLP.ColumnStyles.Clear()
         TLP.ColumnStyles.Add(New ColumnStyle)
-        TLP.ColumnStyles.Item(0).SizeType = SizeType.Percent
-        TLP.ColumnStyles.Item(0).Width = 100
+        TLP.ColumnStyles.Item(0).SizeType = SizeType.Absolute
+        TLP.ColumnStyles.Item(0).Width = 200
+        TLP.ColumnStyles.Add(New ColumnStyle)
+        TLP.ColumnStyles.Item(1).SizeType = SizeType.Percent
+        TLP.ColumnStyles.Item(1).Width = 100
         TLP.RowStyles.Clear()
         TLP.RowStyles.Add(New RowStyle)
         TLP.RowStyles.Add(New RowStyle)
@@ -203,8 +263,26 @@ Public Class Form1
         TLP.RowStyles.Item(1).SizeType = SizeType.Percent
         TLP.RowStyles.Item(1).Height = 100
 
+        Dim groupBox1 As GroupBox = New GroupBox
+        groupBox1.Name = strTabGUID & "_DetailsGroupbox"
+        groupBox1.Text = "Details"
+        groupBox1.Height = 44
+        groupBox1.Width = 414
+
+        Dim DetailsLabel As Label = New Label
+        DetailsLabel.Name = strTabGUID & "_DetailsLabel"
+        DetailsLabel.Dock = DockStyle.Fill
+        Dim CurrentLabelFont As Font = DetailsLabel.Font
+        Dim NewLabelFont As Font = New Font(CurrentLabelFont.FontFamily, CurrentLabelFont.Size, FontStyle.Bold)
+        DetailsLabel.Font = NewLabelFont
+        DetailsLabel.TextAlign = ContentAlignment.MiddleCenter
+
+
+        groupBox1.Controls.Add(DetailsLabel)
+
+
         Dim groupBox As GroupBox = New GroupBox
-        groupBox.Name = strTabGUID & "_Groupbox"
+        groupBox.Name = strTabGUID & "_SearchGroupbox"
         groupBox.Text = "Search"
         groupBox.Height = 44
         groupBox.Width = 414
@@ -244,17 +322,40 @@ Public Class Form1
         DGV.Dock = DockStyle.Fill
         DGV.BackgroundColor = SystemColors.Window
         DGV.GridColor = SystemColors.Window
+        DGV.AllowUserToResizeRows = False
+        DGV.ContextMenuStrip = DGVContextMenuStrip
+        DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader
+        DGV.AllowUserToOrderColumns = True
+        DGV.AllowUserToAddRows = False
+        'DGV.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing
+
+
 
         DGV.DataSource = DataTable.DefaultView
         DGV.Update()
 
+        AddHandler DGV.CellPainting, AddressOf Me.dataGridViewForSearching_CellPainting
+
         GridViewList.Add(DGV)
 
-        TLP.Controls.Add(groupBox, 0, 0)
+        DetailsLabel.Text = "Displaying " & DataTable.Rows.Count & "/" & DataTable.Rows.Count & " Rows"
+
+        TLP.Controls.Add(groupBox1, 0, 0)
+        TLP.Controls.Add(groupBox, 1, 0)
         TLP.Controls.Add(DGV, 0, 1)
+        TLP.SetColumnSpan(DGV, 2)
+
         TabPage.Controls.Add(TLP)
 
         TabControl1.TabPages.Add(TabPage)
+
+        For Each Tab As TabPage In TabControl1.TabPages
+            If (Tab.Name) = (strTabGUID & "_TabPage") Then
+                TabControl1.SelectedTab = Tab
+                TabControl1.Update()
+                Exit For
+            End If
+        Next
 
         Return strTabGUID
     End Function
@@ -282,10 +383,12 @@ Public Class Form1
                     If StrSearchText.Trim() <> "" Then
                         Dim strFilter As String = ""
                         For Each Column As DataColumn In dv.Table.Columns
-                            If strFilter = "" Then
-                                strFilter = "[" & Column.ColumnName & "] Like '" & StrSearchText & "'"
-                            Else
-                                strFilter = strFilter & " OR [" & Column.ColumnName & "] like '" & StrSearchText & "'"
+                            If Column.ColumnName <> "RowIndex" Then
+                                If strFilter = "" Then
+                                    strFilter = "[" & Column.ColumnName & "] Like '" & StrSearchText & "'"
+                                Else
+                                    strFilter = strFilter & " OR [" & Column.ColumnName & "] like '" & StrSearchText & "'"
+                                End If
                             End If
                         Next
                         dv.RowFilter = strFilter
@@ -294,6 +397,21 @@ Public Class Form1
                     End If
                     DataGridView.DataSource = dv
                     DataGridView.Update()
+
+                    For Each Tab As TabPage In TabControl1.TabPages
+                        If Tab.Name = (strTabGUID & "_TabPage") Then
+                            Try
+                                Dim ControlName As String = ""
+                                ControlName = strTabGUID & "_DetailsLabel"
+                                Dim DetailsControl As Control() = Tab.Controls.Find(ControlName, True)
+                                Dim DetailsLabel As Label = DirectCast(DetailsControl(0), Label)
+                                DetailsLabel.Text = "Displaying " & dv.Count & "/" & dv.Table.Rows.Count & " Rows"
+                            Catch ex As Exception
+
+                            End Try
+                        End If
+                    Next
+
                 Catch ex As Exception
                     'MsgBox(ex.Message & vbCrLf & vbCrLf & ex.StackTrace & vbCrLf & vbCrLf & ex.Data.ToString())
                 End Try
@@ -301,7 +419,17 @@ Public Class Form1
             End If
         Next
 
+
+
     End Sub
+
+
+
+
+
+
+
+
 
     Private Sub ButtonClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         ' Handle your Button clicks here
@@ -309,6 +437,14 @@ Public Class Form1
         Dim TheButton As Button = DirectCast(sender, Button)
         Dim strTabGUID As String = ""
         strTabGUID = TheButton.Name.ToString().Replace("_BtnClose", "")
+
+
+
+
+
+        'FilterDGV(strTabGUID)
+
+        'Exit Sub
 
 
         For Each textbox As TextBox In TextboxList
@@ -328,13 +464,141 @@ Public Class Form1
             End If
         Next
 
+        Dim PreviousTabIndex As Int32 = 0
+        Dim TabRemoved As Boolean = False
+        Dim NextTabIndex As Int32 = 0
+        Dim TabCount As Int32 = 0
+        TabCount = TabControl1.TabPages.Count
         For Each TabPage As TabPage In TabControl1.TabPages
+
             If TabPage.Name = (strTabGUID & "_TabPage") Then
-                TabControl1.TabPages.Remove(TabPage)
+
+                If PreviousTabIndex > 0 AndAlso TabCount > 2 Then
+                    TabControl1.TabPages.Remove(TabPage)
+                    TabControl1.SelectedTab = TabControl1.TabPages().Item(PreviousTabIndex)
+                    TabControl1.Update()
+                    Exit For
+                ElseIf TabCount = 2 Then
+                    TabControl1.TabPages.Remove(TabPage)
+                    TabControl1.SelectedTab = TabControl1.TabPages().Item(0)
+                    TabControl1.Update()
+                    Exit For
+                Else
+                    TabControl1.TabPages.Remove(TabPage)
+                    TabRemoved = True
+                    TabControl1.Update()
+                End If
+
+            Else
+                If TabRemoved = False Then
+                    PreviousTabIndex = TabPage.TabIndex
+                Else
+                    TabControl1.SelectedTab = TabPage
+                    TabControl1.Update()
+                    Exit For
+                End If
             End If
         Next
 
     End Sub
+
+
+
+    Sub FilterDGV(ByVal strTabGUID As String)
+        Try
+            Dim FilterWizard As New FilterWizard
+            FilterWizard.TabGuid = strTabGUID
+            For Each DataGridView As DataGridView In GridViewList
+                If DataGridView.Name = (strTabGUID) Then
+                    For Each Column As DataGridViewColumn In DataGridView.Columns
+                        Dim StrColumnName As String = ""
+                        StrColumnName = "[" & Column.Name & "]"
+                        FilterWizard.DataGridViewColumns.Add(StrColumnName)
+                    Next
+                    Exit For
+                End If
+            Next
+            If FilterWizard.ShowDialog() Then
+
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+
+
+
+
+    Function GetSearchTerm(ByVal strTabGUID As String) As String
+        Dim SearchTerm As String = ""
+        For Each textbox As TextBox In TextboxList
+            If textbox.Name = (strTabGUID & "_Textbox") Then
+                SearchTerm = textbox.Text.Trim()
+                Exit For
+            End If
+        Next
+        Return SearchTerm
+    End Function
+
+
+
+    Private Sub dataGridViewForSearching_CellPainting(ByVal sender As Object, ByVal e As DataGridViewCellPaintingEventArgs)
+        Dim SearchText As String = ""
+
+        Try
+            Dim DVG As DataGridView = DirectCast(sender, DataGridView)
+            SearchText = GetSearchTerm(DVG.Name)
+        Catch ex As Exception
+
+        End Try
+
+        If e.RowIndex > -1 AndAlso e.ColumnIndex > 0 Then
+            If Not String.IsNullOrWhiteSpace(SearchText.Trim()) Then
+                Dim gridCellValue As String = e.FormattedValue.ToString()
+                Dim startIndexInCellValue As Integer = gridCellValue.ToLower().IndexOf(SearchText.Trim().ToLower())
+
+                If startIndexInCellValue >= 0 Then
+                    e.Handled = True
+                    e.PaintBackground(e.CellBounds, True)
+                    Dim hl_rect As Rectangle = New Rectangle()
+                    hl_rect.Y = e.CellBounds.Y + 2
+                    hl_rect.Height = e.CellBounds.Height - 5
+                    Dim sBeforeSearchword As String = gridCellValue.Substring(0, startIndexInCellValue)
+                    Dim sSearchWord As String = gridCellValue.Substring(startIndexInCellValue, SearchText.Trim().Length)
+                    Dim s1 As Size = TextRenderer.MeasureText(e.Graphics, sBeforeSearchword, e.CellStyle.Font, e.CellBounds.Size)
+                    Dim s2 As Size = TextRenderer.MeasureText(e.Graphics, sSearchWord, e.CellStyle.Font, e.CellBounds.Size)
+
+                    If s1.Width > 5 Then
+                        hl_rect.X = e.CellBounds.X + s1.Width - 5
+                        hl_rect.Width = s2.Width - 6
+                    Else
+                        hl_rect.X = e.CellBounds.X + 2
+                        hl_rect.Width = s2.Width - 6
+                    End If
+
+                    Dim hl_brush As SolidBrush
+                    hl_brush = New SolidBrush(Color.Yellow)
+                    e.Graphics.FillRectangle(hl_brush, hl_rect)
+                    hl_brush.Dispose()
+                    e.PaintContent(e.CellBounds)
+                End If
+            End If
+        End If
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
         Dim SettingsPage As New Settings
@@ -351,8 +615,136 @@ Public Class Form1
                 Dim dt As New DataTable
                 Dim FilePath As String = ""
                 FilePath = Item
-                BackgroundWorker1.ReportProgress(1, "Processing: " & FilePath)
-                dt = CleanParse(FilePath)
+
+                Dim iUserState As List(Of Object) = New List(Of Object)
+                iUserState.Add(FilePath)
+                iUserState.Add(0)
+
+                BackgroundWorker1.ReportProgress(1, iUserState)
+                'dt = CleanParse(FilePath)
+
+#Region "CleanParse"
+
+                Dim ResultTable As DataTable = New DataTable()
+
+                If File.Exists(FilePath) Then
+                    Dim CorrectDelimiter As String = ""
+
+                    For Each Delim In Delimiters
+                        ResultTable.Rows.Clear()
+                        ResultTable.Columns.Clear()
+                        Dim RowNumber As Int32 = 0
+                        Dim CurrentDelimArray As ArrayList = New ArrayList
+                        Dim LineCount As Int32 = File.ReadAllLines(FilePath).Length
+                        Dim ReportArray As String() = {Convert.ToInt32(LineCount * 0.1), Convert.ToInt32(LineCount * 0.2), Convert.ToInt32(LineCount * 0.3), Convert.ToInt32(LineCount * 0.4), Convert.ToInt32(LineCount * 0.5), Convert.ToInt32(LineCount * 0.6), Convert.ToInt32(LineCount * 0.7), Convert.ToInt32(LineCount * 0.8), Convert.ToInt32(LineCount * 0.9), Convert.ToInt32(LineCount)}
+                        Using MyReader As New Microsoft.VisualBasic.FileIO.TextFieldParser(FilePath)
+                            MyReader.TextFieldType = FileIO.FieldType.Delimited
+                            MyReader.SetDelimiters(Delim.Delimiter)
+                            Dim currentRow As String()
+
+                            While Not MyReader.EndOfData
+                                RowNumber += 1
+                                If (RowNumber = ReportArray(0)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(10)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(1)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(20)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(2)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(30)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(3)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(40)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(4)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(50)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(5)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(60)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(6)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(70)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(7)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(80)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(8)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(90)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                ElseIf (RowNumber = ReportArray(8)) Then
+                                    Dim oUserState As List(Of Object) = New List(Of Object)
+                                    oUserState.Add(FilePath)
+                                    oUserState.Add(100)
+                                    BackgroundWorker1.ReportProgress(1, oUserState)
+                                End If
+                                Try
+                                    currentRow = MyReader.ReadFields()
+                                    CurrentDelimArray.Add(currentRow.Count)
+                                    Try
+                                        If ResultTable.Columns.Count = 0 Then
+                                            Dim RowIndex As DataColumn = ResultTable.Columns.Add("RowIndex", GetType(Int32))
+                                            RowIndex.AutoIncrement = True
+                                            RowIndex.AutoIncrementSeed = 1
+                                            RowIndex.AutoIncrementStep = 1
+                                            RowIndex.ReadOnly = True
+                                            For Each abItem As String In currentRow
+                                                ResultTable.Columns.Add(abItem)
+                                            Next
+                                        Else
+                                            If ResultTable.Columns.Count = (currentRow.Count + 1) Then
+                                                Dim oDataRow As DataRow = ResultTable.NewRow()
+                                                For i = 0 To (currentRow.Count - 1)
+                                                    oDataRow.Item(i + 1) = currentRow(i)
+                                                Next
+                                                ResultTable.Rows.Add(oDataRow)
+                                            End If
+                                        End If
+                                    Catch ex As Exception
+
+                                    End Try
+
+                                Catch ex As Microsoft.VisualBasic.FileIO.MalformedLineException
+                                    'MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
+                                End Try
+                            End While
+                            Dim UniqueValueCount As Int32 = CurrentDelimArray.ToArray().Distinct().Count()
+                            If UniqueValueCount = 1 Then
+                                Dim UniqueValues As Array = CurrentDelimArray.ToArray().Distinct().ToArray()
+                                If Convert.ToInt32(UniqueValues.GetValue(0)) > 1 Then
+                                    CorrectDelimiter = Delim.Delimiter
+                                    dt = ResultTable
+                                    Exit For
+                                End If
+                            End If
+                        End Using
+                    Next
+
+                End If
+
+#End Region
+
+
+
+
+
                 Dim eUserState As List(Of Object) = New List(Of Object)
                 eUserState.Add(FilePath)
                 eUserState.Add(dt)
@@ -363,7 +755,16 @@ Public Class Form1
 
     Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
         If e.ProgressPercentage = 1 Then
-            ToolStripStatusLabel2.Text = e.UserState.ToString()
+            Dim UserState As List(Of Object) = New List(Of Object)
+            UserState = DirectCast(e.UserState, List(Of Object))
+            Dim FilePath As String = ""
+            FilePath = UserState.Item(0)
+            Dim Percentage As Int32 = 0
+            Percentage = UserState.Item(1)
+            ToolStripStatusLabel2.Text = "Processing: " & FilePath
+            ToolStripProgressBar1.Maximum = 100
+            ToolStripProgressBar1.Value = Percentage
+            'Me.Refresh()
         ElseIf e.ProgressPercentage = 2 Then
             Try
                 Dim UserState As List(Of Object) = New List(Of Object)
@@ -371,7 +772,7 @@ Public Class Form1
                 Dim FilePath As String = ""
                 FilePath = UserState.Item(0)
                 Dim dt As New DataTable
-                dt = UserState.Item(1) 'DirectCast(e.Result, DataTable)
+                dt = UserState.Item(1)
                 BuildNewTab(FilePath, dt)
             Catch ex As Exception
 
@@ -381,5 +782,136 @@ Public Class Form1
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         ToolStripStatusLabel2.Text = "Ready"
+        ToolStripProgressBar1.Value = 0
+    End Sub
+
+    Private Sub AllCellsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AllCellsToolStripMenuItem.Click
+        Try
+            Dim SelectedTab As String = ""
+            Dim strTabGUID As String = ""
+            SelectedTab = TabControl1.SelectedTab().Name
+            If InStr(SelectedTab, "_TabPage") > 0 Then
+                strTabGUID = SelectedTab.Replace("_TabPage", "")
+            End If
+            ResizeColumns(strTabGUID, 6)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub HeaderColumnToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HeaderColumnToolStripMenuItem.Click
+        Try
+            Dim SelectedTab As String = ""
+            Dim strTabGUID As String = ""
+            SelectedTab = TabControl1.SelectedTab().Name
+            If InStr(SelectedTab, "_TabPage") > 0 Then
+                strTabGUID = SelectedTab.Replace("_TabPage", "")
+            End If
+            ResizeColumns(strTabGUID, 2)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub FillToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FillToolStripMenuItem.Click
+        Try
+            Dim SelectedTab As String = ""
+            Dim strTabGUID As String = ""
+            SelectedTab = TabControl1.SelectedTab().Name
+            If InStr(SelectedTab, "_TabPage") > 0 Then
+                strTabGUID = SelectedTab.Replace("_TabPage", "")
+            End If
+            ResizeColumns(strTabGUID, 16)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub NoneToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NoneToolStripMenuItem.Click
+        Try
+            Dim SelectedTab As String = ""
+            Dim strTabGUID As String = ""
+            SelectedTab = TabControl1.SelectedTab().Name
+            If InStr(SelectedTab, "_TabPage") > 0 Then
+                strTabGUID = SelectedTab.Replace("_TabPage", "")
+            End If
+            ResizeColumns(strTabGUID, 1)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
+        Try
+            Dim SelectedTab As String = ""
+            Dim strTabGUID As String = ""
+            SelectedTab = TabControl1.SelectedTab().Name
+            If InStr(SelectedTab, "_TabPage") > 0 Then
+                strTabGUID = SelectedTab.Replace("_TabPage", "")
+                Dim AutoSizeMode As DataGridViewAutoSizeColumnMode = GetColumnAutoSizeMode(strTabGUID)
+                GridViewDisplayToolStripMenuItem.Visible = True
+                AllCellsToolStripMenuItem.Checked = False
+                HeaderColumnToolStripMenuItem.Checked = False
+                FillToolStripMenuItem.Checked = False
+                NoneToolStripMenuItem.Checked = False
+
+                If AutoSizeMode <> Nothing Then
+                    Select Case AutoSizeMode
+                        Case DataGridViewAutoSizeColumnMode.AllCells
+                            AllCellsToolStripMenuItem.Checked = True
+                        Case DataGridViewAutoSizeColumnMode.Fill
+                            FillToolStripMenuItem.Checked = True
+                        Case DataGridViewAutoSizeColumnMode.ColumnHeader
+                            HeaderColumnToolStripMenuItem.Checked = True
+                        Case DataGridViewAutoSizeColumnMode.None
+                            NoneToolStripMenuItem.Checked = True
+                        Case Else
+
+                    End Select
+                End If
+
+            Else
+                GridViewDisplayToolStripMenuItem.Visible = False
+                GridViewDisplayToolStripMenuItem.Visible = True
+                AllCellsToolStripMenuItem.Checked = False
+                HeaderColumnToolStripMenuItem.Checked = False
+                FillToolStripMenuItem.Checked = False
+                NoneToolStripMenuItem.Checked = False
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub AllCellsToolStripMenuItem_CheckStateChanged(sender As Object, e As EventArgs) Handles AllCellsToolStripMenuItem.CheckStateChanged
+        If AllCellsToolStripMenuItem.Checked Then
+            HeaderColumnToolStripMenuItem.Checked = False
+            FillToolStripMenuItem.Checked = False
+            NoneToolStripMenuItem.Checked = False
+        End If
+    End Sub
+
+    Private Sub HeaderColumnToolStripMenuItem_CheckStateChanged(sender As Object, e As EventArgs) Handles HeaderColumnToolStripMenuItem.CheckStateChanged
+        If HeaderColumnToolStripMenuItem.Checked Then
+            AllCellsToolStripMenuItem.Checked = False
+            FillToolStripMenuItem.Checked = False
+            NoneToolStripMenuItem.Checked = False
+        End If
+    End Sub
+
+    Private Sub FillToolStripMenuItem_CheckStateChanged(sender As Object, e As EventArgs) Handles FillToolStripMenuItem.CheckStateChanged
+        If FillToolStripMenuItem.Checked Then
+            AllCellsToolStripMenuItem.Checked = False
+            HeaderColumnToolStripMenuItem.Checked = False
+            NoneToolStripMenuItem.Checked = False
+        End If
+    End Sub
+
+    Private Sub NoneToolStripMenuItem_CheckStateChanged(sender As Object, e As EventArgs) Handles NoneToolStripMenuItem.CheckStateChanged
+        If NoneToolStripMenuItem.Checked Then
+            AllCellsToolStripMenuItem.Checked = False
+            FillToolStripMenuItem.Checked = False
+            HeaderColumnToolStripMenuItem.Checked = False
+        End If
     End Sub
 End Class
