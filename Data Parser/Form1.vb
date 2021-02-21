@@ -93,7 +93,7 @@ Public Class Form1
                             'MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
                         End Try
                     End While
-                    Dim UniqueValueCount As Int32 = CurrentDelimArray.ToArray().Distinct().Count()
+                    Dim UniqueValueCount As Integer = CurrentDelimArray.ToArray().Distinct().Count()
                     If UniqueValueCount = 1 Then
                         Dim UniqueValues As Array = CurrentDelimArray.ToArray().Distinct().ToArray()
                         If Convert.ToInt32(UniqueValues.GetValue(0)) > 1 Then
@@ -169,7 +169,7 @@ Public Class Form1
     End Sub
 
 
-    Sub ResizeColumns(ByVal strTabGUID As String, ByVal FillMode As Int32)
+    Sub ResizeColumns(ByVal strTabGUID As String, ByVal FillMode As Integer)
         Try
             For Each DataGridView As DataGridView In GridViewList
                 If (DataGridView.Name) = (strTabGUID) Then
@@ -360,7 +360,7 @@ Public Class Form1
         Return strTabGUID
     End Function
 
-    Private Sub Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub Button_Click(ByVal sender As Object, ByVal e As System.EventArgs)
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
@@ -431,7 +431,7 @@ Public Class Form1
 
 
 
-    Private Sub ButtonClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub ButtonClose_Click(ByVal sender As Object, ByVal e As System.EventArgs)
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
@@ -464,10 +464,10 @@ Public Class Form1
             End If
         Next
 
-        Dim PreviousTabIndex As Int32 = 0
+        Dim PreviousTabIndex As Integer = 0
         Dim TabRemoved As Boolean = False
-        Dim NextTabIndex As Int32 = 0
-        Dim TabCount As Int32 = 0
+        Dim NextTabIndex As Integer = 0
+        Dim TabCount As Integer = 0
         TabCount = TabControl1.TabPages.Count
         For Each TabPage As TabPage In TabControl1.TabPages
 
@@ -616,9 +616,10 @@ Public Class Form1
                 Dim FilePath As String = ""
                 FilePath = Item
 
-                Dim iUserState As List(Of Object) = New List(Of Object)
-                iUserState.Add(FilePath)
-                iUserState.Add(0)
+                Dim iUserState As List(Of Object) = New List(Of Object) From {
+                    FilePath,
+                    0
+                }
 
                 BackgroundWorker1.ReportProgress(1, iUserState)
                 'dt = CleanParse(FilePath)
@@ -633,9 +634,9 @@ Public Class Form1
                     For Each Delim In Delimiters
                         ResultTable.Rows.Clear()
                         ResultTable.Columns.Clear()
-                        Dim RowNumber As Int32 = 0
+                        Dim RowNumber As Integer = 0
                         Dim CurrentDelimArray As ArrayList = New ArrayList
-                        Dim LineCount As Int32 = File.ReadAllLines(FilePath).Length
+                        Dim LineCount As Integer = File.ReadAllLines(FilePath).Length
                         Dim ReportArray As String() = {Convert.ToInt32(LineCount * 0.1), Convert.ToInt32(LineCount * 0.2), Convert.ToInt32(LineCount * 0.3), Convert.ToInt32(LineCount * 0.4), Convert.ToInt32(LineCount * 0.5), Convert.ToInt32(LineCount * 0.6), Convert.ToInt32(LineCount * 0.7), Convert.ToInt32(LineCount * 0.8), Convert.ToInt32(LineCount * 0.9), Convert.ToInt32(LineCount)}
                         Using MyReader As New Microsoft.VisualBasic.FileIO.TextFieldParser(FilePath)
                             MyReader.TextFieldType = FileIO.FieldType.Delimited
@@ -700,7 +701,7 @@ Public Class Form1
                                     CurrentDelimArray.Add(currentRow.Count)
                                     Try
                                         If ResultTable.Columns.Count = 0 Then
-                                            Dim RowIndex As DataColumn = ResultTable.Columns.Add("RowIndex", GetType(Int32))
+                                            Dim RowIndex As DataColumn = ResultTable.Columns.Add("RowIndex", GetType(Integer))
                                             RowIndex.AutoIncrement = True
                                             RowIndex.AutoIncrementSeed = 1
                                             RowIndex.AutoIncrementStep = 1
@@ -725,7 +726,7 @@ Public Class Form1
                                     'MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
                                 End Try
                             End While
-                            Dim UniqueValueCount As Int32 = CurrentDelimArray.ToArray().Distinct().Count()
+                            Dim UniqueValueCount As Integer = CurrentDelimArray.ToArray().Distinct().Count()
                             If UniqueValueCount = 1 Then
                                 Dim UniqueValues As Array = CurrentDelimArray.ToArray().Distinct().ToArray()
                                 If Convert.ToInt32(UniqueValues.GetValue(0)) > 1 Then
@@ -759,7 +760,7 @@ Public Class Form1
             UserState = DirectCast(e.UserState, List(Of Object))
             Dim FilePath As String = ""
             FilePath = UserState.Item(0)
-            Dim Percentage As Int32 = 0
+            Dim Percentage As Integer = 0
             Percentage = UserState.Item(1)
             ToolStripStatusLabel2.Text = "Processing: " & FilePath
             ToolStripProgressBar1.Maximum = 100
