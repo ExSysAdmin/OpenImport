@@ -63,8 +63,9 @@ Public Class Form1
     End Sub
 
     Private Sub RegexPatternsToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        Dim RegExDialog As New RegExPatterns
-        RegExDialog.PatternList = Patterns
+        Dim RegExDialog As New RegExPatterns With {
+            .PatternList = Patterns
+        }
         If RegExDialog.ShowDialog() = DialogResult.OK Then
 
         End If
@@ -143,8 +144,9 @@ Public Class Form1
     Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
         Try
             Dim FileArr As ArrayList = New ArrayList
-            Dim FileBrowser As OpenFileDialog = New OpenFileDialog
-            FileBrowser.Multiselect = True
+            Dim FileBrowser As OpenFileDialog = New OpenFileDialog With {
+                .Multiselect = True
+            }
             If FileBrowser.ShowDialog() = DialogResult.OK Then
                 For Each FilePath In FileBrowser.FileNames
                     If FilePath <> "" And File.Exists(FilePath) Then
@@ -240,14 +242,16 @@ Public Class Form1
     Function BuildNewTab(ByVal StrFileName As String, ByVal DataTable As DataTable) As String
         Dim strTabGUID As String = Guid.NewGuid().ToString().Replace("-", "")
 
-        Dim TabPage As TabPage = New TabPage
-        TabPage.Name = strTabGUID & "_TabPage"
-        TabPage.Text = StrFileName
-        TabPage.BackColor = SystemColors.Window
+        Dim TabPage As TabPage = New TabPage With {
+            .Name = strTabGUID & "_TabPage",
+            .Text = StrFileName,
+            .BackColor = SystemColors.Window
+        }
 
-        Dim TLP As TableLayoutPanel = New TableLayoutPanel
-        TLP.Name = strTabGUID & "_TLP"
-        TLP.Dock = DockStyle.Fill
+        Dim TLP As TableLayoutPanel = New TableLayoutPanel With {
+            .Name = strTabGUID & "_TLP",
+            .Dock = DockStyle.Fill
+        }
         TLP.ColumnStyles.Clear()
         TLP.ColumnStyles.Add(New ColumnStyle)
         TLP.ColumnStyles.Item(0).SizeType = SizeType.Absolute
@@ -263,15 +267,17 @@ Public Class Form1
         TLP.RowStyles.Item(1).SizeType = SizeType.Percent
         TLP.RowStyles.Item(1).Height = 100
 
-        Dim groupBox1 As GroupBox = New GroupBox
-        groupBox1.Name = strTabGUID & "_DetailsGroupbox"
-        groupBox1.Text = "Details"
-        groupBox1.Height = 44
-        groupBox1.Width = 414
+        Dim groupBox1 As GroupBox = New GroupBox With {
+            .Name = strTabGUID & "_DetailsGroupbox",
+            .Text = "Details",
+            .Height = 44,
+            .Width = 414
+        }
 
-        Dim DetailsLabel As Label = New Label
-        DetailsLabel.Name = strTabGUID & "_DetailsLabel"
-        DetailsLabel.Dock = DockStyle.Fill
+        Dim DetailsLabel As Label = New Label With {
+            .Name = strTabGUID & "_DetailsLabel",
+            .Dock = DockStyle.Fill
+        }
         Dim CurrentLabelFont As Font = DetailsLabel.Font
         Dim NewLabelFont As Font = New Font(CurrentLabelFont.FontFamily, CurrentLabelFont.Size, FontStyle.Bold)
         DetailsLabel.Font = NewLabelFont
@@ -281,35 +287,39 @@ Public Class Form1
         groupBox1.Controls.Add(DetailsLabel)
 
 
-        Dim groupBox As GroupBox = New GroupBox
-        groupBox.Name = strTabGUID & "_SearchGroupbox"
-        groupBox.Text = "Search"
-        groupBox.Height = 44
-        groupBox.Width = 414
+        Dim groupBox As GroupBox = New GroupBox With {
+            .Name = strTabGUID & "_SearchGroupbox",
+            .Text = "Search",
+            .Height = 44,
+            .Width = 414
+        }
 
-        Dim textBox As TextBox = New TextBox
-        textBox.Name = strTabGUID & "_Textbox"
-        textBox.Height = 20
-        textBox.Width = 224
-        textBox.Location = New Point(6, 19)
+        Dim textBox As TextBox = New TextBox With {
+            .Name = strTabGUID & "_Textbox",
+            .Height = 20,
+            .Width = 224,
+            .Location = New Point(6, 19)
+        }
 
         TextboxList.Add(textBox)
 
-        Dim button As Button = New Button
-        button.Name = strTabGUID & "_Btn"
-        button.Text = "Search"
-        button.Height = 23
-        button.Width = 75
-        button.Location = New Point(236, 17)
+        Dim button As Button = New Button With {
+            .Name = strTabGUID & "_Btn",
+            .Text = "Search",
+            .Height = 23,
+            .Width = 75,
+            .Location = New Point(236, 17)
+        }
 
         AddHandler button.Click, AddressOf Me.Button_Click
 
-        Dim buttonClose As Button = New Button
-        buttonClose.Name = strTabGUID & "_BtnClose"
-        buttonClose.Text = "Close"
-        buttonClose.Height = 23
-        buttonClose.Width = 75
-        buttonClose.Location = New Point(321, 17)
+        Dim buttonClose As Button = New Button With {
+            .Name = strTabGUID & "_BtnClose",
+            .Text = "Close",
+            .Height = 23,
+            .Width = 75,
+            .Location = New Point(321, 17)
+        }
 
         AddHandler buttonClose.Click, AddressOf Me.ButtonClose_Click
 
@@ -317,21 +327,19 @@ Public Class Form1
         groupBox.Controls.Add(button)
         groupBox.Controls.Add(buttonClose)
 
-        Dim DGV As DataGridView = New DataGridView
-        DGV.Name = strTabGUID
-        DGV.Dock = DockStyle.Fill
-        DGV.BackgroundColor = SystemColors.Window
-        DGV.GridColor = SystemColors.Window
-        DGV.AllowUserToResizeRows = False
-        DGV.ContextMenuStrip = DGVContextMenuStrip
-        DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader
-        DGV.AllowUserToOrderColumns = True
-        DGV.AllowUserToAddRows = False
         'DGV.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing
-
-
-
-        DGV.DataSource = DataTable.DefaultView
+        Dim DGV As DataGridView = New DataGridView With {
+            .Name = strTabGUID,
+            .Dock = DockStyle.Fill,
+            .BackgroundColor = SystemColors.Window,
+            .GridColor = SystemColors.Window,
+            .AllowUserToResizeRows = False,
+            .ContextMenuStrip = DGVContextMenuStrip,
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader,
+            .AllowUserToOrderColumns = True,
+            .AllowUserToAddRows = False,
+            .DataSource = DataTable.DefaultView
+        }
         DGV.Update()
 
         AddHandler DGV.CellPainting, AddressOf Me.dataGridViewForSearching_CellPainting
@@ -506,8 +514,9 @@ Public Class Form1
 
     Sub FilterDGV(ByVal strTabGUID As String)
         Try
-            Dim FilterWizard As New FilterWizard
-            FilterWizard.TabGuid = strTabGUID
+            Dim FilterWizard As New FilterWizard With {
+                .TabGuid = strTabGUID
+            }
             For Each DataGridView As DataGridView In GridViewList
                 If DataGridView.Name = (strTabGUID) Then
                     For Each Column As DataGridViewColumn In DataGridView.Columns
@@ -561,9 +570,10 @@ Public Class Form1
                 If startIndexInCellValue >= 0 Then
                     e.Handled = True
                     e.PaintBackground(e.CellBounds, True)
-                    Dim hl_rect As Rectangle = New Rectangle()
-                    hl_rect.Y = e.CellBounds.Y + 2
-                    hl_rect.Height = e.CellBounds.Height - 5
+                    Dim hl_rect As Rectangle = New Rectangle With {
+                        .Y = e.CellBounds.Y + 2,
+                        .Height = e.CellBounds.Height - 5
+                    }
                     Dim sBeforeSearchword As String = gridCellValue.Substring(0, startIndexInCellValue)
                     Dim sSearchWord As String = gridCellValue.Substring(startIndexInCellValue, SearchText.Trim().Length)
                     Dim s1 As Size = TextRenderer.MeasureText(e.Graphics, sBeforeSearchword, e.CellStyle.Font, e.CellBounds.Size)
@@ -601,8 +611,9 @@ Public Class Form1
 
 
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
-        Dim SettingsPage As New Settings
-        SettingsPage.PatternList = Patterns
+        Dim SettingsPage As New Settings With {
+            .PatternList = Patterns
+        }
         If SettingsPage.ShowDialog() = DialogResult.OK Then
 
         End If

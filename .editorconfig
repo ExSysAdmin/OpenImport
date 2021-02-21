@@ -2,3 +2,6 @@
 
 # IDE0049: Simplify Names
 dotnet_diagnostic.IDE0049.severity = error
+
+# IDE0017: Simplify object initialization
+dotnet_diagnostic.IDE0017.severity = warning
