@@ -74,7 +74,7 @@ Public Class Form1
 
 
 
-    Function CleanParse(ByVal FilePath As String) As DataTable
+    Function CleanParse(FilePath As String) As DataTable
         Dim ResultTable As DataTable = New DataTable()
 
         If File.Exists(FilePath) Then
@@ -171,7 +171,7 @@ Public Class Form1
     End Sub
 
 
-    Sub ResizeColumns(ByVal strTabGUID As String, ByVal FillMode As Integer)
+    Sub ResizeColumns(strTabGUID As String, FillMode As Integer)
         Try
             For Each DataGridView As DataGridView In GridViewList
                 If (DataGridView.Name) = (strTabGUID) Then
@@ -198,7 +198,7 @@ Public Class Form1
     End Sub
 
 
-    Function GetColumnAutoSizeMode(ByVal strTabGUID As String) As DataGridViewAutoSizeColumnMode
+    Function GetColumnAutoSizeMode(strTabGUID As String) As DataGridViewAutoSizeColumnMode
         Try
             For Each DataGridView As DataGridView In GridViewList
                 If (DataGridView.Name) = (strTabGUID) Then
@@ -239,7 +239,7 @@ Public Class Form1
 
 
 
-    Function BuildNewTab(ByVal StrFileName As String, ByVal DataTable As DataTable) As String
+    Function BuildNewTab(StrFileName As String, DataTable As DataTable) As String
         Dim strTabGUID As String = Guid.NewGuid().ToString().Replace("-", "")
 
         Dim TabPage As TabPage = New TabPage With {
@@ -368,7 +368,7 @@ Public Class Form1
         Return strTabGUID
     End Function
 
-    Private Sub Button_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+    Private Sub Button_Click(sender As Object, e As System.EventArgs)
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
@@ -439,7 +439,7 @@ Public Class Form1
 
 
 
-    Private Sub ButtonClose_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+    Private Sub ButtonClose_Click(sender As Object, e As System.EventArgs)
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
@@ -512,7 +512,7 @@ Public Class Form1
 
 
 
-    Sub FilterDGV(ByVal strTabGUID As String)
+    Sub FilterDGV(strTabGUID As String)
         Try
             Dim FilterWizard As New FilterWizard With {
                 .TabGuid = strTabGUID
@@ -539,7 +539,7 @@ Public Class Form1
 
 
 
-    Function GetSearchTerm(ByVal strTabGUID As String) As String
+    Function GetSearchTerm(strTabGUID As String) As String
         Dim SearchTerm As String = ""
         For Each textbox As TextBox In TextboxList
             If textbox.Name = (strTabGUID & "_Textbox") Then
@@ -552,7 +552,7 @@ Public Class Form1
 
 
 
-    Private Sub dataGridViewForSearching_CellPainting(ByVal sender As Object, ByVal e As DataGridViewCellPaintingEventArgs)
+    Private Sub dataGridViewForSearching_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs)
         Dim SearchText As String = ""
 
         Try

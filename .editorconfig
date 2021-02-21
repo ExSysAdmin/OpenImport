@@ -8,3 +8,6 @@ dotnet_diagnostic.IDE0017.severity = warning
 
 # IDE0028: Simplify collection initialization
 dotnet_diagnostic.IDE0028.severity = warning
+
+# IDE0081: 'ByVal' keyword is unnecessary and can be removed.
+dotnet_diagnostic.IDE0081.severity = warning

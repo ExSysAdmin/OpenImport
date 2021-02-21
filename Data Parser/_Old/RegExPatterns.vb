@@ -12,7 +12,7 @@ Public Class RegExPatterns
         LoadPatterns()
     End Sub
 
-    Sub LoadPatterns(Optional ByVal SelectedIndex As Integer = -1)
+    Sub LoadPatterns(Optional SelectedIndex As Integer = -1)
         PatternGridView.Rows.Clear()
         For Each Pattern As PatternCls In PatternList
             PatternGridView.Rows.Add(Pattern.Id, Pattern.Name, Pattern.Pattern)
