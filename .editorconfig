@@ -5,3 +5,6 @@ dotnet_diagnostic.IDE0049.severity = error
 
 # IDE0017: Simplify object initialization
 dotnet_diagnostic.IDE0017.severity = warning
+
+# IDE0028: Simplify collection initialization
+dotnet_diagnostic.IDE0028.severity = warning

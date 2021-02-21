@@ -657,54 +657,64 @@ Public Class Form1
                             While Not MyReader.EndOfData
                                 RowNumber += 1
                                 If (RowNumber = ReportArray(0)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(10)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        10
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(1)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(20)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        20
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(2)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(30)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        30
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(3)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(40)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        40
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(4)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(50)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        50
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(5)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(60)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        60
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(6)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(70)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        70
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(7)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(80)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        80
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(8)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(90)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        90
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(8)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(100)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        100
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 End If
                                 Try
@@ -757,9 +767,10 @@ Public Class Form1
 
 
 
-                Dim eUserState As List(Of Object) = New List(Of Object)
-                eUserState.Add(FilePath)
-                eUserState.Add(dt)
+                Dim eUserState As List(Of Object) = New List(Of Object) From {
+                    FilePath,
+                    dt
+                }
                 BackgroundWorker1.ReportProgress(2, eUserState)
             Next
         End If
