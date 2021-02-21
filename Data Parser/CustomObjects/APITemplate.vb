@@ -1,7 +1,7 @@
 ﻿Public Class APITemplate
 
     Sub New()
-        Id = Guid.NewGuid().ToString().Replace("-", "")
+        Id = Guid.NewGuid().ToString("N")
         Columns = New List(Of APITemplateColumn)
     End Sub
 
