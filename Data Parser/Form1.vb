@@ -372,8 +372,7 @@ Public Class Form1
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
-        Dim strTabGUID As String = ""
-        strTabGUID = TheButton.Name.ToString().Replace("_Btn", "")
+        Dim strTabGUID As String = TheButton.Name.ToString().Replace("_Btn", "")
         Dim StrSearchText As String = ""
 
 
@@ -443,8 +442,7 @@ Public Class Form1
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
-        Dim strTabGUID As String = ""
-        strTabGUID = TheButton.Name.ToString().Replace("_BtnClose", "")
+        Dim strTabGUID As String = TheButton.Name.ToString().Replace("_BtnClose", "")
 
 
 
@@ -474,9 +472,7 @@ Public Class Form1
 
         Dim PreviousTabIndex As Integer = 0
         Dim TabRemoved As Boolean = False
-        Dim NextTabIndex As Integer = 0
-        Dim TabCount As Integer = 0
-        TabCount = TabControl1.TabPages.Count
+        Dim TabCount As Integer = TabControl1.TabPages.Count
         For Each TabPage As TabPage In TabControl1.TabPages
 
             If TabPage.Name = (strTabGUID & "_TabPage") Then
@@ -624,8 +620,7 @@ Public Class Form1
             Dim FileArr As ArrayList = e.Argument
             For Each Item In FileArr.ToArray()
                 Dim dt As New DataTable
-                Dim FilePath As String = ""
-                FilePath = Item
+                Dim FilePath As String = Item
 
                 Dim iUserState As List(Of Object) = New List(Of Object) From {
                     FilePath,
@@ -640,8 +635,6 @@ Public Class Form1
                 Dim ResultTable As DataTable = New DataTable()
 
                 If File.Exists(FilePath) Then
-                    Dim CorrectDelimiter As String = ""
-
                     For Each Delim In Delimiters
                         ResultTable.Rows.Clear()
                         ResultTable.Columns.Clear()
@@ -751,7 +744,7 @@ Public Class Form1
                             If UniqueValueCount = 1 Then
                                 Dim UniqueValues As Array = CurrentDelimArray.ToArray().Distinct().ToArray()
                                 If Convert.ToInt32(UniqueValues.GetValue(0)) > 1 Then
-                                    CorrectDelimiter = Delim.Delimiter
+                                    Dim CorrectDelimiter As String = Delim.Delimiter
                                     dt = ResultTable
                                     Exit For
                                 End If
@@ -778,12 +771,9 @@ Public Class Form1
 
     Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
         If e.ProgressPercentage = 1 Then
-            Dim UserState As List(Of Object) = New List(Of Object)
-            UserState = DirectCast(e.UserState, List(Of Object))
-            Dim FilePath As String = ""
-            FilePath = UserState.Item(0)
-            Dim Percentage As Integer = 0
-            Percentage = UserState.Item(1)
+            Dim UserState As List(Of Object) = DirectCast(e.UserState, List(Of Object))
+            Dim FilePath As String = UserState.Item(0)
+            Dim Percentage As Integer = UserState.Item(1)
             ToolStripStatusLabel2.Text = "Processing: " & FilePath
             ToolStripProgressBar1.Maximum = 100
             ToolStripProgressBar1.Value = Percentage
