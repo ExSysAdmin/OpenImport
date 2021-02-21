@@ -22,8 +22,8 @@ Public Class Form1
     Sub Startup()
 
         Dim objInitialStartup As New InitialStartup
-        Patterns = objInitialStartup.GetInitialPatternList()
-        Delimiters = objInitialStartup.GetInitialDelimiterList()
+        Patterns = objInitialStartup.GetInitialPatterns().ToList
+        Delimiters = objInitialStartup.GetInitialDelimiters().ToList
 
     End Sub
 
