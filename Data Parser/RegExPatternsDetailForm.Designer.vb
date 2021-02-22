@@ -30,8 +30,8 @@ Partial Class RegExPatternsDetailForm
         Me.DataTypeComboBox = New System.Windows.Forms.ComboBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.EnabledCheckBox = New System.Windows.Forms.CheckBox()
-        Me.OKButton = New System.Windows.Forms.Button()
-        Me.CancelButton = New System.Windows.Forms.Button()
+        Me.OKBtn = New System.Windows.Forms.Button()
+        Me.CancelBtn = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -113,29 +113,29 @@ Partial Class RegExPatternsDetailForm
         '
         'OKButton
         '
-        Me.OKButton.Location = New System.Drawing.Point(356, 330)
-        Me.OKButton.Name = "OKButton"
-        Me.OKButton.Size = New System.Drawing.Size(75, 23)
-        Me.OKButton.TabIndex = 8
-        Me.OKButton.Text = "Ok"
-        Me.OKButton.UseVisualStyleBackColor = True
+        Me.OKBtn.Location = New System.Drawing.Point(356, 330)
+        Me.OKBtn.Name = "OKButton"
+        Me.OKBtn.Size = New System.Drawing.Size(75, 23)
+        Me.OKBtn.TabIndex = 8
+        Me.OKBtn.Text = "Ok"
+        Me.OKBtn.UseVisualStyleBackColor = True
         '
         'CancelButton
         '
-        Me.CancelButton.Location = New System.Drawing.Point(270, 330)
-        Me.CancelButton.Name = "CancelButton"
-        Me.CancelButton.Size = New System.Drawing.Size(75, 23)
-        Me.CancelButton.TabIndex = 7
-        Me.CancelButton.Text = "Cancel"
-        Me.CancelButton.UseVisualStyleBackColor = True
+        Me.CancelBtn.Location = New System.Drawing.Point(270, 330)
+        Me.CancelBtn.Name = "CancelButton"
+        Me.CancelBtn.Size = New System.Drawing.Size(75, 23)
+        Me.CancelBtn.TabIndex = 7
+        Me.CancelBtn.Text = "Cancel"
+        Me.CancelBtn.UseVisualStyleBackColor = True
         '
         'RegExPatternsDetailForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(443, 365)
-        Me.Controls.Add(Me.CancelButton)
-        Me.Controls.Add(Me.OKButton)
+        Me.Controls.Add(Me.CancelBtn)
+        Me.Controls.Add(Me.OKBtn)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
@@ -157,6 +157,6 @@ Partial Class RegExPatternsDetailForm
     Friend WithEvents DataTypeComboBox As ComboBox
     Friend WithEvents Label2 As Label
     Friend WithEvents EnabledCheckBox As CheckBox
-    Friend WithEvents OKButton As Button
-    Friend WithEvents CancelButton As Button
+    Friend WithEvents OKBtn As Button
+    Friend WithEvents CancelBtn As Button
 End Class

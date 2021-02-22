@@ -2,7 +2,7 @@
 
     Public ObjPattern As PatternCls = New PatternCls
 
-    Private Sub OKButton_Click(sender As Object, e As EventArgs) Handles OKButton.Click
+    Private Sub OKBtn_Click(sender As Object, e As EventArgs) Handles OKBtn.Click
         If Not IsNothing(ObjPattern.Name) And Not IsNothing(ObjPattern.Pattern) Then
             Me.DialogResult = DialogResult.OK
         Else
@@ -11,7 +11,7 @@
         Me.Close()
     End Sub
 
-    Private Sub CancelButton_Click(sender As Object, e As EventArgs) Handles CancelButton.Click
+    Private Sub CancelBtn_Click(sender As Object, e As EventArgs) Handles CancelBtn.Click
         Me.DialogResult = DialogResult.Cancel
         Me.Close()
     End Sub

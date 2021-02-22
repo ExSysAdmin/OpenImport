@@ -12,7 +12,7 @@ Public Class RegExPatterns
         LoadPatterns()
     End Sub
 
-    Sub LoadPatterns(Optional ByVal SelectedIndex As Int32 = -1)
+    Sub LoadPatterns(Optional SelectedIndex As Integer = -1)
         PatternGridView.Rows.Clear()
         For Each Pattern As PatternCls In PatternList
             PatternGridView.Rows.Add(Pattern.Id, Pattern.Name, Pattern.Pattern)
@@ -163,7 +163,7 @@ Public Class RegExPatterns
 
     Private Sub ArrowUpBtn_Click(sender As Object, e As EventArgs) Handles ArrowUpBtn.Click
         Try
-            Dim i As Int32 = 0
+            Dim i As Integer = 0
             For i = 0 To (PatternList.Count - 1)
                 Dim CurrentItem As PatternCls = PatternList.Item(i)
                 If CurrentItem.Id = PatternGridView.SelectedRows(0).Cells(0).Value Then
@@ -180,7 +180,7 @@ Public Class RegExPatterns
 
     Private Sub ArrowDownBtn_Click(sender As Object, e As EventArgs) Handles ArrowDownBtn.Click
         Try
-            Dim i As Int32 = 0
+            Dim i As Integer = 0
             For i = 0 To (PatternList.Count - 1)
                 Dim CurrentItem As PatternCls = PatternList.Item(i)
                 If CurrentItem.Id = PatternGridView.SelectedRows(0).Cells(0).Value Then

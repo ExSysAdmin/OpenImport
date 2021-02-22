@@ -12,7 +12,7 @@ Public Class ImportWizard
 
     End Sub
 
-    Sub InitialGridViewLoad(ByVal FilePath As String)
+    Sub InitialGridViewLoad(FilePath As String)
         If File.Exists(FilePath) Then
             ImportWizardDataGridView.Columns.Add("ImportFile", FilePath)
             ImportWizardDataGridView.Columns(0).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill

@@ -22,8 +22,8 @@ Public Class Form1
     Sub Startup()
 
         Dim objInitialStartup As New InitialStartup
-        Patterns = objInitialStartup.GetInitialPatternList()
-        Delimiters = objInitialStartup.GetInitialDelimiterList()
+        Patterns = objInitialStartup.GetInitialPatterns().ToList
+        Delimiters = objInitialStartup.GetInitialDelimiters().ToList
 
     End Sub
 
@@ -63,8 +63,9 @@ Public Class Form1
     End Sub
 
     Private Sub RegexPatternsToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        Dim RegExDialog As New RegExPatterns
-        RegExDialog.PatternList = Patterns
+        Dim RegExDialog As New RegExPatterns With {
+            .PatternList = Patterns
+        }
         If RegExDialog.ShowDialog() = DialogResult.OK Then
 
         End If
@@ -73,7 +74,7 @@ Public Class Form1
 
 
 
-    Function CleanParse(ByVal FilePath As String) As DataTable
+    Function CleanParse(FilePath As String) As DataTable
         Dim ResultTable As DataTable = New DataTable()
 
         If File.Exists(FilePath) Then
@@ -93,7 +94,7 @@ Public Class Form1
                             'MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
                         End Try
                     End While
-                    Dim UniqueValueCount As Int32 = CurrentDelimArray.ToArray().Distinct().Count()
+                    Dim UniqueValueCount As Integer = CurrentDelimArray.ToArray().Distinct().Count()
                     If UniqueValueCount = 1 Then
                         Dim UniqueValues As Array = CurrentDelimArray.ToArray().Distinct().ToArray()
                         If Convert.ToInt32(UniqueValues.GetValue(0)) > 1 Then
@@ -143,8 +144,9 @@ Public Class Form1
     Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
         Try
             Dim FileArr As ArrayList = New ArrayList
-            Dim FileBrowser As OpenFileDialog = New OpenFileDialog
-            FileBrowser.Multiselect = True
+            Dim FileBrowser As OpenFileDialog = New OpenFileDialog With {
+                .Multiselect = True
+            }
             If FileBrowser.ShowDialog() = DialogResult.OK Then
                 For Each FilePath In FileBrowser.FileNames
                     If FilePath <> "" And File.Exists(FilePath) Then
@@ -169,7 +171,7 @@ Public Class Form1
     End Sub
 
 
-    Sub ResizeColumns(ByVal strTabGUID As String, ByVal FillMode As Int32)
+    Sub ResizeColumns(strTabGUID As String, FillMode As Integer)
         Try
             For Each DataGridView As DataGridView In GridViewList
                 If (DataGridView.Name) = (strTabGUID) Then
@@ -196,7 +198,7 @@ Public Class Form1
     End Sub
 
 
-    Function GetColumnAutoSizeMode(ByVal strTabGUID As String) As DataGridViewAutoSizeColumnMode
+    Function GetColumnAutoSizeMode(strTabGUID As String) As DataGridViewAutoSizeColumnMode
         Try
             For Each DataGridView As DataGridView In GridViewList
                 If (DataGridView.Name) = (strTabGUID) Then
@@ -237,17 +239,19 @@ Public Class Form1
 
 
 
-    Function BuildNewTab(ByVal StrFileName As String, ByVal DataTable As DataTable) As String
+    Function BuildNewTab(StrFileName As String, DataTable As DataTable) As String
         Dim strTabGUID As String = Guid.NewGuid().ToString().Replace("-", "")
 
-        Dim TabPage As TabPage = New TabPage
-        TabPage.Name = strTabGUID & "_TabPage"
-        TabPage.Text = StrFileName
-        TabPage.BackColor = SystemColors.Window
+        Dim TabPage As TabPage = New TabPage With {
+            .Name = strTabGUID & "_TabPage",
+            .Text = StrFileName,
+            .BackColor = SystemColors.Window
+        }
 
-        Dim TLP As TableLayoutPanel = New TableLayoutPanel
-        TLP.Name = strTabGUID & "_TLP"
-        TLP.Dock = DockStyle.Fill
+        Dim TLP As TableLayoutPanel = New TableLayoutPanel With {
+            .Name = strTabGUID & "_TLP",
+            .Dock = DockStyle.Fill
+        }
         TLP.ColumnStyles.Clear()
         TLP.ColumnStyles.Add(New ColumnStyle)
         TLP.ColumnStyles.Item(0).SizeType = SizeType.Absolute
@@ -263,15 +267,17 @@ Public Class Form1
         TLP.RowStyles.Item(1).SizeType = SizeType.Percent
         TLP.RowStyles.Item(1).Height = 100
 
-        Dim groupBox1 As GroupBox = New GroupBox
-        groupBox1.Name = strTabGUID & "_DetailsGroupbox"
-        groupBox1.Text = "Details"
-        groupBox1.Height = 44
-        groupBox1.Width = 414
+        Dim groupBox1 As GroupBox = New GroupBox With {
+            .Name = strTabGUID & "_DetailsGroupbox",
+            .Text = "Details",
+            .Height = 44,
+            .Width = 414
+        }
 
-        Dim DetailsLabel As Label = New Label
-        DetailsLabel.Name = strTabGUID & "_DetailsLabel"
-        DetailsLabel.Dock = DockStyle.Fill
+        Dim DetailsLabel As Label = New Label With {
+            .Name = strTabGUID & "_DetailsLabel",
+            .Dock = DockStyle.Fill
+        }
         Dim CurrentLabelFont As Font = DetailsLabel.Font
         Dim NewLabelFont As Font = New Font(CurrentLabelFont.FontFamily, CurrentLabelFont.Size, FontStyle.Bold)
         DetailsLabel.Font = NewLabelFont
@@ -281,35 +287,39 @@ Public Class Form1
         groupBox1.Controls.Add(DetailsLabel)
 
 
-        Dim groupBox As GroupBox = New GroupBox
-        groupBox.Name = strTabGUID & "_SearchGroupbox"
-        groupBox.Text = "Search"
-        groupBox.Height = 44
-        groupBox.Width = 414
+        Dim groupBox As GroupBox = New GroupBox With {
+            .Name = strTabGUID & "_SearchGroupbox",
+            .Text = "Search",
+            .Height = 44,
+            .Width = 414
+        }
 
-        Dim textBox As TextBox = New TextBox
-        textBox.Name = strTabGUID & "_Textbox"
-        textBox.Height = 20
-        textBox.Width = 224
-        textBox.Location = New Point(6, 19)
+        Dim textBox As TextBox = New TextBox With {
+            .Name = strTabGUID & "_Textbox",
+            .Height = 20,
+            .Width = 224,
+            .Location = New Point(6, 19)
+        }
 
         TextboxList.Add(textBox)
 
-        Dim button As Button = New Button
-        button.Name = strTabGUID & "_Btn"
-        button.Text = "Search"
-        button.Height = 23
-        button.Width = 75
-        button.Location = New Point(236, 17)
+        Dim button As Button = New Button With {
+            .Name = strTabGUID & "_Btn",
+            .Text = "Search",
+            .Height = 23,
+            .Width = 75,
+            .Location = New Point(236, 17)
+        }
 
         AddHandler button.Click, AddressOf Me.Button_Click
 
-        Dim buttonClose As Button = New Button
-        buttonClose.Name = strTabGUID & "_BtnClose"
-        buttonClose.Text = "Close"
-        buttonClose.Height = 23
-        buttonClose.Width = 75
-        buttonClose.Location = New Point(321, 17)
+        Dim buttonClose As Button = New Button With {
+            .Name = strTabGUID & "_BtnClose",
+            .Text = "Close",
+            .Height = 23,
+            .Width = 75,
+            .Location = New Point(321, 17)
+        }
 
         AddHandler buttonClose.Click, AddressOf Me.ButtonClose_Click
 
@@ -317,21 +327,19 @@ Public Class Form1
         groupBox.Controls.Add(button)
         groupBox.Controls.Add(buttonClose)
 
-        Dim DGV As DataGridView = New DataGridView
-        DGV.Name = strTabGUID
-        DGV.Dock = DockStyle.Fill
-        DGV.BackgroundColor = SystemColors.Window
-        DGV.GridColor = SystemColors.Window
-        DGV.AllowUserToResizeRows = False
-        DGV.ContextMenuStrip = DGVContextMenuStrip
-        DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader
-        DGV.AllowUserToOrderColumns = True
-        DGV.AllowUserToAddRows = False
         'DGV.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing
-
-
-
-        DGV.DataSource = DataTable.DefaultView
+        Dim DGV As DataGridView = New DataGridView With {
+            .Name = strTabGUID,
+            .Dock = DockStyle.Fill,
+            .BackgroundColor = SystemColors.Window,
+            .GridColor = SystemColors.Window,
+            .AllowUserToResizeRows = False,
+            .ContextMenuStrip = DGVContextMenuStrip,
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader,
+            .AllowUserToOrderColumns = True,
+            .AllowUserToAddRows = False,
+            .DataSource = DataTable.DefaultView
+        }
         DGV.Update()
 
         AddHandler DGV.CellPainting, AddressOf Me.dataGridViewForSearching_CellPainting
@@ -360,12 +368,11 @@ Public Class Form1
         Return strTabGUID
     End Function
 
-    Private Sub Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub Button_Click(sender As Object, e As System.EventArgs)
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
-        Dim strTabGUID As String = ""
-        strTabGUID = TheButton.Name.ToString().Replace("_Btn", "")
+        Dim strTabGUID As String = TheButton.Name.ToString().Replace("_Btn", "")
         Dim StrSearchText As String = ""
 
 
@@ -431,12 +438,11 @@ Public Class Form1
 
 
 
-    Private Sub ButtonClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub ButtonClose_Click(sender As Object, e As System.EventArgs)
         ' Handle your Button clicks here
 
         Dim TheButton As Button = DirectCast(sender, Button)
-        Dim strTabGUID As String = ""
-        strTabGUID = TheButton.Name.ToString().Replace("_BtnClose", "")
+        Dim strTabGUID As String = TheButton.Name.ToString().Replace("_BtnClose", "")
 
 
 
@@ -464,11 +470,9 @@ Public Class Form1
             End If
         Next
 
-        Dim PreviousTabIndex As Int32 = 0
+        Dim PreviousTabIndex As Integer = 0
         Dim TabRemoved As Boolean = False
-        Dim NextTabIndex As Int32 = 0
-        Dim TabCount As Int32 = 0
-        TabCount = TabControl1.TabPages.Count
+        Dim TabCount As Integer = TabControl1.TabPages.Count
         For Each TabPage As TabPage In TabControl1.TabPages
 
             If TabPage.Name = (strTabGUID & "_TabPage") Then
@@ -504,10 +508,11 @@ Public Class Form1
 
 
 
-    Sub FilterDGV(ByVal strTabGUID As String)
+    Sub FilterDGV(strTabGUID As String)
         Try
-            Dim FilterWizard As New FilterWizard
-            FilterWizard.TabGuid = strTabGUID
+            Dim FilterWizard As New FilterWizard With {
+                .TabGuid = strTabGUID
+            }
             For Each DataGridView As DataGridView In GridViewList
                 If DataGridView.Name = (strTabGUID) Then
                     For Each Column As DataGridViewColumn In DataGridView.Columns
@@ -530,7 +535,7 @@ Public Class Form1
 
 
 
-    Function GetSearchTerm(ByVal strTabGUID As String) As String
+    Function GetSearchTerm(strTabGUID As String) As String
         Dim SearchTerm As String = ""
         For Each textbox As TextBox In TextboxList
             If textbox.Name = (strTabGUID & "_Textbox") Then
@@ -543,7 +548,7 @@ Public Class Form1
 
 
 
-    Private Sub dataGridViewForSearching_CellPainting(ByVal sender As Object, ByVal e As DataGridViewCellPaintingEventArgs)
+    Private Sub dataGridViewForSearching_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs)
         Dim SearchText As String = ""
 
         Try
@@ -561,9 +566,10 @@ Public Class Form1
                 If startIndexInCellValue >= 0 Then
                     e.Handled = True
                     e.PaintBackground(e.CellBounds, True)
-                    Dim hl_rect As Rectangle = New Rectangle()
-                    hl_rect.Y = e.CellBounds.Y + 2
-                    hl_rect.Height = e.CellBounds.Height - 5
+                    Dim hl_rect As Rectangle = New Rectangle With {
+                        .Y = e.CellBounds.Y + 2,
+                        .Height = e.CellBounds.Height - 5
+                    }
                     Dim sBeforeSearchword As String = gridCellValue.Substring(0, startIndexInCellValue)
                     Dim sSearchWord As String = gridCellValue.Substring(startIndexInCellValue, SearchText.Trim().Length)
                     Dim s1 As Size = TextRenderer.MeasureText(e.Graphics, sBeforeSearchword, e.CellStyle.Font, e.CellBounds.Size)
@@ -601,8 +607,9 @@ Public Class Form1
 
 
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
-        Dim SettingsPage As New Settings
-        SettingsPage.PatternList = Patterns
+        Dim SettingsPage As New Settings With {
+            .PatternList = Patterns
+        }
         If SettingsPage.ShowDialog() = DialogResult.OK Then
 
         End If
@@ -613,12 +620,12 @@ Public Class Form1
             Dim FileArr As ArrayList = e.Argument
             For Each Item In FileArr.ToArray()
                 Dim dt As New DataTable
-                Dim FilePath As String = ""
-                FilePath = Item
+                Dim FilePath As String = Item
 
-                Dim iUserState As List(Of Object) = New List(Of Object)
-                iUserState.Add(FilePath)
-                iUserState.Add(0)
+                Dim iUserState As List(Of Object) = New List(Of Object) From {
+                    FilePath,
+                    0
+                }
 
                 BackgroundWorker1.ReportProgress(1, iUserState)
                 'dt = CleanParse(FilePath)
@@ -628,14 +635,12 @@ Public Class Form1
                 Dim ResultTable As DataTable = New DataTable()
 
                 If File.Exists(FilePath) Then
-                    Dim CorrectDelimiter As String = ""
-
                     For Each Delim In Delimiters
                         ResultTable.Rows.Clear()
                         ResultTable.Columns.Clear()
-                        Dim RowNumber As Int32 = 0
+                        Dim RowNumber As Integer = 0
                         Dim CurrentDelimArray As ArrayList = New ArrayList
-                        Dim LineCount As Int32 = File.ReadAllLines(FilePath).Length
+                        Dim LineCount As Integer = File.ReadAllLines(FilePath).Length
                         Dim ReportArray As String() = {Convert.ToInt32(LineCount * 0.1), Convert.ToInt32(LineCount * 0.2), Convert.ToInt32(LineCount * 0.3), Convert.ToInt32(LineCount * 0.4), Convert.ToInt32(LineCount * 0.5), Convert.ToInt32(LineCount * 0.6), Convert.ToInt32(LineCount * 0.7), Convert.ToInt32(LineCount * 0.8), Convert.ToInt32(LineCount * 0.9), Convert.ToInt32(LineCount)}
                         Using MyReader As New Microsoft.VisualBasic.FileIO.TextFieldParser(FilePath)
                             MyReader.TextFieldType = FileIO.FieldType.Delimited
@@ -645,54 +650,64 @@ Public Class Form1
                             While Not MyReader.EndOfData
                                 RowNumber += 1
                                 If (RowNumber = ReportArray(0)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(10)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        10
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(1)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(20)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        20
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(2)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(30)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        30
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(3)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(40)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        40
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(4)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(50)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        50
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(5)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(60)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        60
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(6)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(70)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        70
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(7)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(80)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        80
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(8)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(90)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        90
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 ElseIf (RowNumber = ReportArray(8)) Then
-                                    Dim oUserState As List(Of Object) = New List(Of Object)
-                                    oUserState.Add(FilePath)
-                                    oUserState.Add(100)
+                                    Dim oUserState As List(Of Object) = New List(Of Object) From {
+                                        FilePath,
+                                        100
+                                    }
                                     BackgroundWorker1.ReportProgress(1, oUserState)
                                 End If
                                 Try
@@ -700,7 +715,7 @@ Public Class Form1
                                     CurrentDelimArray.Add(currentRow.Count)
                                     Try
                                         If ResultTable.Columns.Count = 0 Then
-                                            Dim RowIndex As DataColumn = ResultTable.Columns.Add("RowIndex", GetType(Int32))
+                                            Dim RowIndex As DataColumn = ResultTable.Columns.Add("RowIndex", GetType(Integer))
                                             RowIndex.AutoIncrement = True
                                             RowIndex.AutoIncrementSeed = 1
                                             RowIndex.AutoIncrementStep = 1
@@ -725,11 +740,11 @@ Public Class Form1
                                     'MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
                                 End Try
                             End While
-                            Dim UniqueValueCount As Int32 = CurrentDelimArray.ToArray().Distinct().Count()
+                            Dim UniqueValueCount As Integer = CurrentDelimArray.ToArray().Distinct().Count()
                             If UniqueValueCount = 1 Then
                                 Dim UniqueValues As Array = CurrentDelimArray.ToArray().Distinct().ToArray()
                                 If Convert.ToInt32(UniqueValues.GetValue(0)) > 1 Then
-                                    CorrectDelimiter = Delim.Delimiter
+                                    Dim CorrectDelimiter As String = Delim.Delimiter
                                     dt = ResultTable
                                     Exit For
                                 End If
@@ -745,9 +760,10 @@ Public Class Form1
 
 
 
-                Dim eUserState As List(Of Object) = New List(Of Object)
-                eUserState.Add(FilePath)
-                eUserState.Add(dt)
+                Dim eUserState As List(Of Object) = New List(Of Object) From {
+                    FilePath,
+                    dt
+                }
                 BackgroundWorker1.ReportProgress(2, eUserState)
             Next
         End If
@@ -755,12 +771,9 @@ Public Class Form1
 
     Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
         If e.ProgressPercentage = 1 Then
-            Dim UserState As List(Of Object) = New List(Of Object)
-            UserState = DirectCast(e.UserState, List(Of Object))
-            Dim FilePath As String = ""
-            FilePath = UserState.Item(0)
-            Dim Percentage As Int32 = 0
-            Percentage = UserState.Item(1)
+            Dim UserState As List(Of Object) = DirectCast(e.UserState, List(Of Object))
+            Dim FilePath As String = UserState.Item(0)
+            Dim Percentage As Integer = UserState.Item(1)
             ToolStripStatusLabel2.Text = "Processing: " & FilePath
             ToolStripProgressBar1.Maximum = 100
             ToolStripProgressBar1.Value = Percentage
